@@ -1,0 +1,531 @@
+---
+title: "Graphics Generation"
+author: "Sri Nimmagadda"
+date: "3/25/2018"
+output: pdf_document
+---
+
+```{r}
+
+# library
+library(stargazer)
+library(survival)
+library(ggplot2)
+library(dplyr)
+library(xtable)
+# set working directory
+setwd("/Users/SriduttN/Desktop/JP Spring Semester")
+# reading in the data set
+timeVaried.sections <- read.csv("Finalized Compilation_SURV.csv", header = TRUE)
+wars.withCovariates <- read.csv("Finalized Compilation.csv", header = TRUE)
+finalCOW_intrastateData <- read.csv("Intrastate COW Data Compilation, 1995 to 2007.csv", header = TRUE)
+atrocityWars <- finalCOW_intrastateData
+atrocityWars <- atrocityWars[-31,]
+atrocityWars <- atrocityWars[-27,]
+atrocityWars <- atrocityWars[-10,]
+atrocityWars <- atrocityWars[-7,]
+atrocityWars <- atrocityWars[-20,]
+atrocityWars <- atrocityWars[-17,]
+atrocityWars <- atrocityWars[-2,]
+atrocityWars <- atrocityWars[-2,]
+atrocityWars <- atrocityWars[-18,]
+atrocityWars <- atrocityWars[-6,]
+atrocityWars <- atrocityWars[-9,]
+atrocityWars <- atrocityWars[-4,]
+atrocityWars <- atrocityWars[-5,]
+# checking length of atrocity wars to corroborate accuracy of dataset
+nrow(atrocityWars)
+
+# reading in the nimmagadda.replication set
+nimmagadda.replication <- read.csv("Political Atrocities Replication File_Final.csv", header = TRUE)
+nimmagadda.replication$X <- 1:nrow(nimmagadda.replication)
+ggplot(data = nimmagadda.replication, aes(x = X, y = Deaths.Number)) + geom_point() +
+  ggtitle("Distribution of Death Count by Date") + xlab("Index of Political Atrocity Observation") + ylab("Death Count")
+
+ggplot(data = timeVaried.sections[14:189, ], aes(x = X, y = LogDeaths)) + geom_point() +
+  ggtitle("Distribution of Log-Death Count by Date") + xlab("Index of Political Atrocity Observation") + ylab("Death Count")
+
+# intervention organization
+intervention <- subset(wars.withCovariates, InternationalOppo == 1)
+intervention.atrocities <- subset(timeVaried.sections, DidAtrocityHappen == 1)
+
+cor(wars.withCovariates$DidAtrocityHappen, wars.withCovariates$WarLength)
+
+# time of first intervention
+firstIntervention <- rep(NA, nrow(intervention.atrocities))
+intervention.atrocities <- cbind(intervention.atrocities, firstIntervention)
+Violation.Dates <- nimmagadda.replication$dated_violations
+intervention.atrocities <- cbind(intervention.atrocities, Violation.Dates, nimmagadda.replication$x)
+
+startDates <- c("10/10/1997", "2/6/1998", "1/1/1997", "10/19/2006")
+
+
+```
+
+```{r, results='asis'}
+
+# dpylr
+nimmagadda.replication.violations <- nimmagadda.replication %>%
+  group_by(x) %>%
+  summarise(sum(Deaths.Number))
+
+totalDeaths <- rep(NA, 31)
+for (i in 1:13) {
+  totalDeaths[i] <- 0
+}
+for (i in 14:31) {
+  totalDeaths[i] <- nimmagadda.replication.violations$'sum(Deaths.Number)'[i-13]
+}
+
+# wars with covariates
+wars.withCovariates <- cbind(wars.withCovariates, totalDeaths)
+wars.withCovariates$LogDeaths <- log(wars.withCovariates$totalDeaths)
+wars.withCovariates$LogDeaths[1:13] <- 0
+
+combinedSurvival <- coxph(data = timeVaried.sections, formula = Surv(WarLength, WarEndStatus) ~
+                            DidAtrocityHappen + EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+combinedSurvival.Deaths <- coxph(data = timeVaried.sections[14:189,], formula = Surv(WarLength, WarEndStatus) ~
+                            LogDeaths + EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+combinedSurvival.woAtrocities <- coxph(data = timeVaried.sections[1:13,], formula = Surv(WarLength, WarEndStatus) ~
+                            EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+combinedSurvival.full <- coxph(data = wars.withCovariates, formula = Surv(WarLength, WarEndStatus) ~
+                            DidAtrocityHappen + EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+combinedSurvival.full.missAngola <- coxph(data = wars.withCovariates[2:31,], formula = Surv(WarLength, WarEndStatus) ~
+                            DidAtrocityHappen + EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+combinedSurvival.full.missAngola.death <- coxph(data = wars.withCovariates[2:31,], formula = Surv(WarLength, WarEndStatus) ~
+                            LogDeaths + EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+combinedSurvival.full.death <- coxph(data = wars.withCovariates, formula = Surv(WarLength, WarEndStatus) ~
+                             LogDeaths + EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+# removing angola
+combinedSurvival.woAtrocities.ang <- coxph(data = timeVaried.sections[2:13,], formula = Surv(WarLength, WarEndStatus) ~
+                            EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap)
+
+combinedSurvival.wAtrocities <- coxph(data = timeVaried.sections[14:189,], formula = Surv(WarLength, WarEndStatus) ~
+                            EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap + LogDeaths)
+
+combinedSurvival.wAtrocities.war <- coxph(data = wars.withCovariates[14:31,], formula = Surv(WarLength, WarEndStatus) ~
+                            EthnFrac + RelFrac + InternationalAlly +
+                            InternationalOppo + African + Polity + Log.Mountainous + Log.Population +
+                            LogGDP.perCap + LogDeaths)
+
+plot(survfit(combinedSurvival.woAtrocities), xlab = "Days Until Conflict End",
+     ylab = "Probability of Conflict Ending", main = "Survival Curve - Conflicts without Atrocities",
+     xaxt = "n")
+axis(side = 1, at = seq(0,2000,200))
+
+
+# removing angola
+plot(survfit(combinedSurvival.woAtrocities.ang), xlab = "Days Until Conflict End",
+     ylab = "Probability of Conflict Ending", main = "Survival Curve - Conflicts without Atrocities")
+
+plot(survfit(combinedSurvival.wAtrocities), xlab = "Days Until Conflict End",
+     ylab = "Probability of Conflict Ending", main = "Survival Curve - War Periods with Atrocities")
+
+plot(survfit(combinedSurvival), xlab = "Days Until Conflict End",
+     ylab = "Probability of Conflict Ending", main = "Survival Curve - Pooled Conflicts")
+
+plot(survfit(combinedSurvival.wAtrocities.war), xlab = "Days Until Conflict End",
+     ylab = "Probability of Conflict Ending", main = "Survival Curve - ConflictsIn With Atrocities",
+     xaxt = "n", )
+axis(side = 1, at = seq(0,2000,200))
+
+stargazer(combinedSurvival.full.missAngola, combinedSurvival.full.missAngola.death, 
+          covariate.labels = c("Did an Atrocity Happen?", "Log-Death Count", "Ethnic Fractionalization",
+                               "Religious Fractionalization",
+                               "International Ally",
+                               "International Opponent",
+                               "African Country",
+                               "Polity",
+                               "Log Mountainous",
+                               "Log Population",
+                               "Log-GDP Per Capita"),
+          column.sep.width = c(".1pt"))
+
+
+stargazer(combinedSurvival.full, combinedSurvival.full.death, combinedSurvival.Deaths,
+          covariate.labels = c("Did an Atrocity Happen?", "Log-Death Count", "Ethnic Fractionalization",
+                               "Religious Fractionalization",
+                               "International Ally",
+                               "International Opponent",
+                               "African Country",
+                               "Polity",
+                               "Log Mountainous",
+                               "Log Population",
+                               "Log-GDP Per Capita"),
+          column.sep.width = c(".1pt"), title = "Test")
+
+stargazer(combinedSurvival.full, combinedSurvival.full.death, combinedSurvival.Deaths, combinedSurvival.full.missAngola, combinedSurvival.full.missAngola.death,
+          covariate.labels = c("Did an Atrocity Happen?", "Log-Death Count", "Ethnic Fractionalization",
+                               "Religious Fractionalization",
+                               "International Ally",
+                               "International Opponent",
+                               "African Country",
+                               "Polity",
+                               "Log Mountainous",
+                               "Log Population",
+                               "Log-GDP Per Capita"),
+          column.sep.width = c(".1pt"), title = "Test")
+
+vector1 <- data.frame(combinedSurvival.full[1])
+vector1$HR <- exp(vector1)
+
+# distribution of conflict lengths
+ggplot(data = finalCOW_intrastateData, aes(x = warTime)) + geom_histogram(binwidth = 200) + xlab("War Length, in Days") + ylab("Frequency of Intrastate Conflict") + ggtitle("Distribution of Intrastate Conflict Lengths, 1995 to 2007") + scale_x_continuous(limits = c(0, 2000))
+
+ggplot(data = timeVaried.sections[1:13, ], aes(x = WarLength)) + geom_histogram(binwidth = 200) + xlab("War Length, in Days") + ylab("Frequency of Intrastate Conflict") + ggtitle("Distribution of Intrastate Conflict Lengths, without Atrocities") + scale_x_continuous(limits = c(0, 2000))
+
+ggplot(data = atrocityWars, aes(x = warTime)) + geom_histogram(binwidth = 200) + xlab("War Length, in Days") + ylab("Frequency of Intrastate Conflict") + ggtitle("Distribution of Intrastate Conflict Lengths, with Atrocities") + scale_x_continuous(limits = c(0, 2000))
+
+ggplot(data = timeVaried.sections[14:189, ], aes(x = WarLength)) + geom_histogram(binwidth = 200) + xlab("War Length, in Days") + ylab("Frequency of Intrastate Conflict") + ggtitle("Distribution of Intrastate Conflict Periods, with Atrocities")
+
+# hypothesis test for difference in mean war length, confidence intervals
+se.noAtrocity.Length <- sqrt(var(timeVaried.sections$WarLength[1:13])/13)
+mean.noAtrocity.Length <- mean(timeVaried.sections$WarLength[1:13])
+
+# confidence interval for war periods of atrocities
+se.AtrocityPeriod.Length <- sqrt(var(timeVaried.sections$WarLength[14:189])/176)
+mean.AtrocityPeriod.Length <- mean(timeVaried.sections$WarLength[14:189])
+
+# confidence interval for conflict duration of wars without atrocities
+se.Atrocity.Length <- sqrt(var(atrocityWars$warTime)/18)
+mean.Atrocity.Length <- mean(atrocityWars$warTime)
+
+# creating a table of the results
+X1 <- rbind(se.noAtrocity.Length, se.Atrocity.Length, se.AtrocityPeriod.Length)
+X2 <- rbind(mean.noAtrocity.Length, mean.Atrocity.Length, mean.AtrocityPeriod.Length)
+C1_table <- cbind(X1, X2)
+row.names(C1_table) <- c("Length of Wars with No Atrocities", 
+                         "Length of Wars with Atrocities", "Length of War Periods (with Atrocities)")
+
+C1_table <- data.frame(C1_table)
+
+SE <- C1_table$X1
+Mean <- C1_table$X2
+
+UpperBound <- 1.96*SE+Mean
+LowerBound <- Mean-1.96*SE
+
+C1_table <- cbind(SE, Mean, UpperBound, LowerBound)
+row.names(C1_table) <- c("Length of Wars with No Atrocities", 
+                         "Length of Wars with Atrocities", "Length of War Periods (with Atrocities)")
+
+
+stargazer(C1_table, title = "Intrastate Conflict Length and Confidence Intervals, 1995 to 2007")
+
+# correlation tests, for wars with atrocities
+cor(atrocityWars$internationalizedAlly, atrocityWars$warTime)
+cor(atrocityWars$internationalizedOpponent, atrocityWars$warTime)
+
+# for wars without atrocities
+cor(timeVaried.sections$InternationalAlly[1:13], timeVaried.sections$WarLength[1:13])
+cor(timeVaried.sections$InternationalOppo[1:13], timeVaried.sections$WarLength[1:13])
+
+# hypothesis test for difference in means between war periods
+hypothesisTestSE <- sqrt((var(atrocityWars$warTime)/18) + var(timeVaried.sections$WarLength[1:13])/13)
+meanDiff <- mean.Atrocity.Length - mean.noAtrocity.Length
+
+# number of standard errors, significant at alpha levels of both .05 and .01
+test1 <- meanDiff/hypothesisTestSE
+
+# hypothesis test for difference between periods
+hypothesisTestSE.2 <- sqrt(se.noAtrocity.Length^2+se.AtrocityPeriod.Length^2)
+meanDiff.2 <- mean.AtrocityPeriod.Length - mean.noAtrocity.Length
+test2 <- meanDiff.2/hypothesisTestSE.2
+
+cor(timeVaried.sections$WarLength[14:189], timeVaried.sections$Log.Mountainous[14:189])
+
+# checking proportional hazards
+plot(cox.zph(combinedSurvival.full))
+plot(cox.zph(combinedSurvival.full.death))
+plot(cox.zph(combinedSurvival.Deaths))
+plot(cox.zph(combinedSurvival.full.missAngola))
+
+
+# dfbeta, influential observations test
+dfbeta <- residuals(combinedSurvival.full, type="dfbeta")
+par(mfrow=c(1, 1))
+for (j in 1:10) {
+  plot(dfbeta[, j], ylab=names(coef(combinedSurvival))[j])
+  abline(h = 0)
+}
+
+dfbeta2 <- residuals(combinedSurvival.full.death, type="dfbeta")
+par(mfrow=c(1, 1))
+for (j in 1:10) {
+  plot(dfbeta2[, j], ylab=names(coef(combinedSurvival.Deaths))[j])
+  abline(h = 0)
+}
+
+dfbeta3 <- residuals(combinedSurvival.Deaths, type="dfbeta")
+par(mfrow=c(1, 1))
+for (j in 1:10) {
+  plot(dfbeta3[, j], ylab=names(coef(combinedSurvival.wAtrocities))[j])
+  abline(h = 0)
+}
+
+dfbeta4 <- residuals(combinedSurvival.full.missAngola, type="dfbeta")
+par(mfrow=c(1, 1))
+for (j in 1:9) {
+  plot(dfbeta4[, j], ylab=names(coef(combinedSurvival))[j])
+  abline(h = 0)
+}
+
+cor(atrocityWars$internationalizedOpponent, atrocityWars$warTime)
+
+desStat1 <- 
+  rbind(mean(wars.withCovariates$EthnFrac), var(wars.withCovariates$EthnFrac), min(wars.withCovariates$EthnFrac), max(wars.withCovariates$EthnFrac))
+
+desStat2 <- 
+  rbind(mean(wars.withCovariates$RelFrac), var(wars.withCovariates$RelFrac), min(wars.withCovariates$RelFrac), max(wars.withCovariates$RelFrac))
+
+desStat3 <- rbind(mean(wars.withCovariates$Log.Mountainous), var(wars.withCovariates$Log.Mountainous), 
+           min(wars.withCovariates$Log.Mountainous), max(wars.withCovariates$Log.Mountainous))
+
+gpa <- wars.withCovariates$LogGDP.perCap[-6]
+
+desStat4 <- rbind(mean(gpa), var(gpa), 
+           min(gpa), max(gpa))
+
+desStat5 <- rbind(mean(wars.withCovariates$Log.Population), var(wars.withCovariates$Log.Population), min(wars.withCovariates$Log.Population), max(wars.withCovariates$Log.Population))
+
+desStat6 <- rbind(mean(wars.withCovariates$InternationalAlly), var(wars.withCovariates$InternationalAlly), min(wars.withCovariates$InternationalAlly), max(wars.withCovariates$InternationalAlly))
+
+desStat7 <- rbind(mean(wars.withCovariates$InternationalOppo), var(wars.withCovariates$InternationalOppo), min(wars.withCovariates$InternationalOppo), max(wars.withCovariates$InternationalOppo))
+
+desStat8 <- rbind(mean(wars.withCovariates$Polity), var(wars.withCovariates$Polity), min(wars.withCovariates$Polity), max(wars.withCovariates$Polity))
+
+
+
+descriptiveFull <- as.matrix(cbind(desStat1,
+                                    desStat2,
+                                    desStat3,
+                                    desStat4,
+                                    desStat5,
+                                    desStat6,
+                                    desStat7,
+                                    desStat8))
+
+
+row.names(descriptiveFull) <- c("Mean", "Variance", "Minimum", "Maximum")
+colnames(descriptiveFull) <- c("Ethnic Fractionalization", "Religious Fractionalization",
+                               "Log-Mountainous %", "Log GDP per Capita", "Log Population",
+                               "International Ally Involvement", "International Opponent Involvement",
+                               "Polity Score")
+desFull <- t(descriptiveFull)
+
+
+stargazer(desFull, column.sep.width = "2pt")
+writeLines(capture.output(stargazer(descriptiveFull)), )
+
+
+```
+
+```{r, results='asis'}
+
+# confidence intervals for proportions of wars that are internationalized based on having atrocities
+cor(wars.withCovariates$DidAtrocityHappen, wars.withCovariates$InternationalOppo)
+
+mean(wars.withCovariates$InternationalOppo)
+
+# confidence intervals
+international.oppo.peaceMean <- mean(wars.withCovariates$InternationalOppo[1:13])
+international.oppo.peaceSE <- sqrt(mean(wars.withCovariates$InternationalOppo[1:13])*(1-mean(wars.withCovariates$InternationalOppo[1:13])))/13
+
+
+international.oppo.atroMean <- mean(wars.withCovariates$InternationalOppo[14:31])
+international.oppo.atroSE <- sqrt(mean(wars.withCovariates$InternationalOppo[14:31])*(1-mean(wars.withCovariates$InternationalOppo[14:31])))/18
+
+CI_internationalOpponent.max <- international.oppo.peaceMean + 1.96*international.oppo.peaceSE
+CI_internationalOpponent.min <- international.oppo.peaceMean - 1.96*international.oppo.peaceSE
+
+CI_internationalOpponent.max.atro <- international.oppo.atroMean + 1.96*international.oppo.atroSE
+CI_internationalOpponent.min.atro <- international.oppo.atroMean - 1.96*international.oppo.atroSE
+
+column1 <- rbind(international.oppo.peaceMean, international.oppo.peaceSE, CI_internationalOpponent.max, CI_internationalOpponent.min)
+
+column2 <- rbind(international.oppo.atroMean, international.oppo.atroMean, CI_internationalOpponent.max.atro, CI_internationalOpponent.min.atro)
+
+IntOppoTable <- data.frame(cbind(column1, column2))
+row.names(IntOppoTable) <- c("Mean", "Median", "95% CI Max", "95% CI Min")
+colnames(IntOppoTable) <- c("Internationalization Rate for 'Clean' Wars", "Internationalization Rate for 'Dirty' Wars")
+
+xtable(IntOppoTable, digits = 3)
+
+
+# for wars that do feature atrocities, does the magnitude of atrocities influence time before intervention?
+
+
+# hypothesis test for differences
+(international.oppo.atroMean - international.oppo.peaceMean)/sqrt(international.oppo.atroSE^2+international.oppo.peaceSE^2)
+
+# plotting log total deaths as a result of time
+ggplot(data = wars.withCovariates, aes(x = LogDeaths, y = WarLength)) + geom_point() + 
+  ggtitle("(1) Civil War Duration on Political Atrocity Magnitude, 1995 to 2007") + xlab("Log of Total Deaths from Political Atrocities") + 
+  ylab("Civil War Length, in Days") + geom_smooth(method = "lm")
+
+ggplot(data = wars.withCovariates[12:31,], aes(x = LogDeaths, y = WarLength)) + geom_point() + 
+  ggtitle("(2) Civil War Duration on Political Atrocity Magnitude, 1995 to 2007") + xlab("Log of Total Deaths from Political Atrocities") + 
+  ylab("Civil War Length, in Days") + geom_smooth(method = "lm")
+
+ggplot(data = wars.withCovariates[14:31,], aes(x = LogDeaths, y = WarLength)) + geom_point() + 
+  ggtitle("(3) Civil War Duration on Political Atrocity Magnitude, 1995 to 2007") + xlab("Log of Total Deaths from Political Atrocities") + 
+  ylab("Civil War Length, in Days") + geom_smooth(method = "lm")
+
+COWinternationalized <- read.csv("Intra-StateWarData_v4.1 (All International).csv", header = TRUE)
+
+mean(atrocityWars$warTime)-mean(wars.withCovariates$WarLength[2:13])
+  sqrt((var(wars.withCovariates$WarLength[2:13])/12)+(var(atrocityWars$warTime)/18))
+mean(atrocityWars$warTime)
+
+angolaCheck1 <- rbind(wars.withCovariates$EthnFrac[1],
+      wars.withCovariates$RelFrac[1],
+      wars.withCovariates$Log.Mountainous[1],
+      wars.withCovariates$Log.Population[1],
+      wars.withCovariates$African[1])
+row.names(angolaCheck1) <- c("Ethnic Fractionalization", "Religious Fractionalization", 
+                           "Log Mountainous %", "Log Population",
+                           "African Status")
+colnames(angolaCheck1) <- c("Angola Covariate Measurements")
+
+angolaCheck2 <- rbind(mean(wars.withCovariates$EthnFrac[1:13]),
+      mean(wars.withCovariates$RelFrac[1:13]),
+      mean(wars.withCovariates$Log.Mountainous[1:13]),
+      mean(wars.withCovariates$Log.Population[1:13]),
+      mean(wars.withCovariates$African[1:13]))
+row.names(angolaCheck2) <- c("Ethnic Fractionalization", "Religious Fractionalization", 
+                           "Log Mountainous %", "Log Population",
+                           "African Status")
+colnames(angolaCheck2) <- c("Mean of 'Clean' Civil Wars ")
+
+angTab1 <- as.matrix(cbind(angolaCheck1, angolaCheck2))
+
+# show the output
+stargazer(angTab1)
+
+
+```
+
+```{r, results='asis'}
+
+# revisiting initial dataset for sri lankan data
+atrocities_1995_2012 <- data.frame(read.csv("Atrocities 1995-2012.csv", header = TRUE))
+deleteRows_95_12 <- atrocities_1995_2012[-c(7776:65535), ]
+deleteColumns_95_12 <- deleteRows_95_12[, c(1:73)]
+lankaAtrocities <- subset(deleteColumns_95_12, Country == "LKA")
+lankaAtrocities$index <- 1:nrow(lankaAtrocities)
+lankaAtrocities$Deaths.Number <- as.numeric(lankaAtrocities$Deaths.Number)
+
+# condensing to make sure only govenrment committed atrocities
+lankaGov <- lankaAtrocities[which(lankaAtrocities$Perp.State.Military != '' |
+                                   lankaAtrocities$Perp.State.Police != '' | lankaAtrocities$Perp.State.Other != ''), ]
+xtable(angolaCheck1)
+
+
+# dplyr
+lankaOrganized <- lankaGov %>%
+  group_by(Start.Year) %>%
+  summarise(sumDeaths = sum(Deaths.Number)) 
+
+ggplot(data = lankaOrganized, aes(x = Start.Year, y = sumDeaths))+geom_histogram(stat='identity') +
+  ggtitle("Sri Lanka - State-Sponsored Civilian Deaths By Year") + xlab("Year") + ylab("Total Deaths")
+
+covarNames <- c("Did Atrocity Happen?", "Ethnic Fractionalization", "Religious Fractionalization", "International Ally", "International Opponent", "Polity", "African Status", "Log Mountainous %", "Log Population", "Log GDP per Capita", "War Length", "Deaths", "Log Deaths")
+
+d <- data.frame(timeVaried.sections[14:189,])
+d <- d[,-1:-4]
+dcor1 <- cor(d)
+
+d2 <- data.frame(wars.withCovariates)
+d2 <- d2[,-1:-4]
+dcor2 <- cor(d2)
+
+
+library(rms)
+
+cvif1 <- vif(combinedSurvival.full)
+cvif2 <- vif(combinedSurvival.full.death)
+
+vifTests <- cbind(cvif1, cvif2)
+
+stargazer(title = "Correlation Matrix For Covariates in Civil War Level Data", dcor2)
+stargazer(title = "Correlation Matrix For Covariates in Atrocity Observation Level Data", dcor1)
+
+polity <- read.csv("polityRawData.csv", header = TRUE)
+
+polityRanks <- c(5,6,6,5,5,5,6,6,6,5)
+polityYeas <- c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009)
+
+tablePolity <- data.frame(cbind(polityYeas, polityRanks))
+colnames(tablePolity) <- c("Year", "Polity Score")
+
+xtable(tablePolity)
+
+stargazer(vifTests)
+stargazer(cvif2)
+
+```
+
+
+```{r}
+
+# creating tables for hazard ratios
+
+# model 1
+
+atom1 <- coef(summary(combinedSurvival.full))
+atom2 <- coef(summary(combinedSurvival.full.death))
+atom3 <- coef(summary(combinedSurvival.Deaths))
+atom4 <- coef(summary(combinedSurvival.full.missAngola))
+atom5 <- coef(summary(combinedSurvival.full.missAngola.death))
+
+
+m1_intl <- mean(wars.withCovariates$InternationalOppo[1:13])
+SE1_intl <- sqrt(m1_intl*(1-m1_intl)/13)
+m1_upB <- m1_intl + 1.96*SE1_intl
+m1_dB <- m1_intl - 1.96*SE1_intl
+
+m2_intl <- mean(wars.withCovariates$InternationalOppo[14:31])
+SE2_intl <- sqrt(m2_intl*(1-m2_intl)/18)
+m2_upB <- m2_intl + 1.96*SE2_intl
+m2_dB <- m2_intl - 1.96*SE2_intl
+
+SE_intl <- rbind(SE1_intl, SE2_intl)
+M_intl <- rbind(m1_intl, m2_intl)
+upB_intl <- rbind(m1_upB, m2_upB)
+dB_intl <- rbind(m1_dB, m2_dB)
+
+prop_intl <- as.matrix(cbind(SE_intl, M_intl, upB_intl, dB_intl))
+colnames(prop_intl) <- c("SE", "Mean", "UpperBound", "LowerBound")
+row.names(prop_intl) <- c("Proportion Internationalization - Clean Wars", "Proportion Internationalization - Dirty Wars")
+
+xtable(prop_intl, digits = 3)
+
+(m1_intl - m2_intl)/sqrt(SE1_intl^2+SE2_intl^2)
+
+```
+

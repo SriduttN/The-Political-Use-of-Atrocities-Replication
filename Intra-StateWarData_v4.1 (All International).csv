@@ -1,0 +1,62 @@
+WarNum,WarName,WarType,CcodeA,SideA,CcodeB,SideB,Intnl,StartMonth1,StartDay1,StartYear1,EndMonth1,EndDay1,EndYear1,StartMonth2,StartDay2,StartYear2,EndMonth2,EndDay2,EndYear2,TransFrom,WhereFought,Initiator,Outcome,TransTo,SideADeaths,SideBDeaths,Version
+891,Croatia-Krajina War,5,344,Croatia,-8,Krajinia Serbs,0,5,-9,1995,11,-9,1995,-8,-8,-8,-8,-8,-8,-8,2,Krajinian Serba,1,-8,-9,-9,4.1
+892,Third Liberia,4,450,Liberia,-8,NPFL,0,4,5,1996,8,20,1996,-8,-8,-8,-8,-8,-8,-8,4,National Patriotic Forces,3,-8,-9,-9,4.1
+893,Sixth Iraqi Kurds,5,645,Iraq,-8,PUK,0,8,31,1996,10,23,1996,-8,-8,-8,-8,-8,-8,-8,6,PUK,6,-8,-9,-9,4.1
+895,Fifth DRC,4,-8,-8,500,Uganda,1,1,1,1997,1,30,1997,-8,-8,-8,-8,-8,-8,-8,4,Kabila-ADFL,2,-8,-8,-9,4.1
+895,Fifth DRC,4,-8,-8,517,Rwanda,1,1,1,1997,5,17,1997,-8,-8,-8,-8,-8,-8,-8,4,Kabila-ADFL,2,-8,-8,-9,4.1
+895,Fifth DRC,4,-8,-8,540,Angola,1,4,28,1997,5,17,1997,-8,-8,-8,-8,-8,-8,-8,4,Kabila-ADFL,2,-8,-8,-9,4.1
+895,Fifth DRC,4,490,DRC,-8,ADFL,1,10,8,1996,5,17,1997,-8,-8,-8,-8,-8,-8,-8,4,Kabila-ADFL,2,-8,-9,-9,4.1
+896,Third Rwanda,4,517,Rwanda,-8,Hutu rebels,0,3,17,1997,10,30,1998,-8,-8,-8,-8,-8,-8,-8,4,Hutu rebels,1,-8,300,3000,4.1
+897,First Congo (Brazzaville),4,-8,-8,540,Angola,1,10,10,1997,10,15,1997,-8,-8,-8,-8,-8,-8,-8,4,FDU,2,-8,-8,-9,4.1
+897,First Congo (Brazzaville),4,484,Congo,-8,FDU (Cobra militia),1,6,5,1997,10,15,1997,-8,-8,-8,-8,-8,-8,-8,4,FDU (Cobra militia),2,-8,-9,-9,4.1
+898,Second Sierra Leone,4,451,Sierra Leone,-8,Kabbah faction,1,2,6,1998,7,7,1999,5,11,2000,11,10,2000,-8,4,Kabbah faction,2,-8,-9,-9,4.1
+898,Second Sierra Leone,4,-8,-8,452,Ghana,1,2,6,1998,7,7,1999,5,11,2000,11,10,2000,-8,4,Kabbah faction,2,-8,-8,-9,4.1
+898,Second Sierra Leone,4,-8,-8,475,Nigeria,1,2,6,1998,7,7,1999,5,11,2000,11,10,2000,-8,4,Kabbah faction,2,-8,-8,-9,4.1
+898,Second Sierra Leone,4,-8,-8,438,Guinea,1,2,6,1998,7,7,1999,5,11,2000,11,10,2000,-8,4,Kabbah faction,2,-8,-8,-9,4.1
+898,Second Sierra Leone,4,-8,-8,200,United Kingdom,1,5,8,2000,11,10,2000,-8,-8,-8,-8,-8,-8,-8,4,Kabbah faction,2,-8,-8,-9,4.1
+900,Kosovo Independence,5,345,Yugoslavia,-8,KLA,0,2,28,1998,3,23,1999,-8,-8,-8,-8,-8,-8,-8,2,Yugoslavia,4,221,400,800,4.1
+902,Guinea-Bissau Military,4,438,Guinea,-8,-8,1,6,9,1998,11,1,1998,-8,-8,-8,-8,-8,-8,-8,4,Man_ Junta,2,-8,-9,-8,4.1
+902,Guinea-Bissau Military,4,404,Guinea-Bissau,-8,Man_ Junta,1,6,7,1998,5,6,1999,-8,-8,-8,-8,-8,-8,-8,4,Man_ Junta,2,-8,-9,-9,4.1
+902,Guinea-Bissau Military,4,433,Senegal,-8,-8,1,6,9,1998,11,1,1998,-8,-8,-8,-8,-8,-8,-8,4,Man_ Junta,2,-8,-9,-8,4.1
+905,Africa's World War,4,540,Angola,-8,-8,1,8,24,1998,11,4,2002,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-9,-8,4.1
+905,Africa's World War,4,625,Sudan,-8,-8,1,9,17,1998,7,22,2002,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-9,-8,4.1
+905,Africa's World War,4,565,Namibia,-8,-8,1,8,28,1998,8,4,2001,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-9,-8,4.1
+905,Africa's World War,4,552,Zimbabwe,-8,-8,1,8,21,1998,9,13,2002,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-9,-8,4.1
+905,Africa's World War,4,-8,-8,517,Rwanda,1,8,11,1998,7,22,2002,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-8,-9,4.1
+905,Africa's World War,4,-8,-8,516,Burundi,1,9,17,1998,7,22,2002,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-8,-9,4.1
+905,Africa's World War,4,-8,-8,500,Uganda,1,8,26,1998,7,22,2002,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-8,-9,4.1
+905,Africa's World War,4,483,Chad,-8,-8,1,9,30,1998,4,18,1999,-8,-8,-8,-8,-8,-8,-8,4,,3,-8,-9,-8,4.1
+905,Africa's World War,4,490,Democratic Republic of Congo,-8,"RCD, MLC, et al",1,8,2,1998,12,17,2002,-8,-8,-8,-8,-8,-8,-8,4,"RCD, MLC, et al",3,-8,-9,-9,4.1
+906,Fourth Chad (Togoimi Revolt),4,483,Chad,-8,MDD & MDJT,0,10,16,1998,4,28,2000,-8,-8,-8,-8,-8,-8,-8,4,MDD & MDJT,7,-8,-9,-9,4.1
+907,Third Angolan,4,540,Angola,-8,UNITA,0,12,4,1998,2,22,2002,-8,-8,-8,-8,-8,-8,-8,4,Angola,1,-8,-9,-9,4.1
+908,Second Congo (Brazzaville),4,484,Congo (Brazzaville),-8,Ninjas and Cocoye militias,0,12,15,1998,11,16,1999,-8,-8,-8,-8,-8,-8,-8,4,Ninjas and Cocoye militias,1,-8,-9,-9,4.1
+910,Moluccas Sectarian,7,-8,Laskar Jihad,-8,FKM & RMS,0,1,-9,1999,8,22,2000,-8,-8,-8,-8,-8,-8,-8,7,Laskar Jihad,7,-8,-9,1800,4.1
+911,First Nigeria Christian-Muslim,7,-8,Christian Tarok,-8,Muslim Fulani,0,5,-9,1999,5,31,2000,-8,-8,-8,-8,-8,-8,-8,4,Muslim Fulani,1,-8,-9,-9,4.1
+912,Second Aceh,5,850,Indonesia,-8,GAM,0,5,3,1999,12,9,2002,-8,-8,-8,-8,-8,-8,-8,7,GAM,3,-8,330,3500,4.1
+913,Oromo Liberation,5,530,Ethiopia,-8,Oromo Lib. Front,0,5,30,1999,8,18,1999,-8,-8,-8,-8,-8,-8,-8,4,Oromo Lib. Front,1,-8,200,800,4.1
+915,Second Chechen,5,365,Russia,-8,Chechnya,0,8,7,1999,10,3,2003,-8,-8,-8,-8,-8,-8,-8,2,Cechnya,1,-8,5000,15000,4.1
+916,Second Philippine-Moro,5,840,Philippines,-8,MILF,0,4,23,2000,6,22,2001,-8,-8,-8,-8,-8,-8,-8,7,Phillippines,3,-8,-9,-9,4.1
+917,Guinean,4,438,Guinea ,-8,RDFG,0,9,11,2000,4,-9,2001,-8,-8,-8,-8,-8,-8,-8,4,RDFG,6,-8,-9,-9,4.1
+918,Third Burundi,4,516,Burundi,-8,FNL & FROLINA,0,3,21,2001,10,8,2003,-8,-8,-8,-8,-8,-8,-8,4,FNL,3,-8,150,3000,4.1
+920,Fourth Rwanda,4,517,Rwanda,-8,Army for the Liberation of Rwanda,0,5,21,2001,9,4,2001,-8,-8,-8,-8,-8,-8,-8,4,ALIR,1,-8,-9,1800,4.1
+921,First Nepal Maoist Insurgency,4,790,Nepal ,-8,CPN,0,11,23,2001,1,29,2003,-8,-8,-8,-8,-8,-8,-8,7,CPN,6,-8,680,3100,4.1
+922,Fourth Liberian,4,450,Liberia,-8,LURD & MODEL,0,2,-9,2002,8,11,2003,-8,-8,-8,-8,-8,-8,-8,4,LURD & MODEL,2,-8,-9,-9,4.1
+923,Ethiopian Anyuaa-Nuer,7,,Anyuaa,-8,Nuer,0,8,-9,2002,1,-9,2003,-8,-8,-8,-8,-8,-8,-8,4,Nuer,7,-8,-9,-9,4.1
+925,Cote d'Ivoire Military,4,220,France,-8,-8,1,12,11,2002,11,16,2004,-8,-8,-8,-8,-8,-8,-8,4,"MPCI, MPIGO, MJP",2,-8,9,-8,4.1
+925,Cote d'Ivoire Military,4,437,Cote d'Ivoire,-8,"MPCI, MPIGO, MJP",1,9,19,2002,11,16,2004,-8,-8,-8,-8,-8,-8,-8,4,"MPCI, MPIGO, MJP",2,-8,200,2500,4.1
+926,Third Philippine-Moro,5,840,Phillippines,-8,MILF & ASG,0,2,11,2003,7,-9,2003,-8,-8,-8,-8,-8,-8,-8,7,Phillippines,7,-8,410,590,4.1
+927,Darfur,5,625,Sudan,-8,SLA & JEM,0,2,26,2003,12,11,2006,-8,-8,-8,-8,-8,-8,-8,6,SLA,6,-8,-9,-9,4.1
+930,Third Aceh,5,850,Indonesia,-8,GAM,0,5,18,2003,11,18,2003,-8,-8,-8,-8,-8,-8,-8,7,Indonesia,1,-8,150,1400,4.1
+931,Second Nepal Maoists,4,790,Nepal,-8,CPN,0,8,27,2003,4,26,2006,-8,-8,-8,-8,-8,-8,-8,7,CPN,3,-8,1260,5770,4.1
+932,Waziristan,5,2,United States,-8,-8,1,2,20,2004,9,5,2006,-8,-8,-8,-8,-8,-8,-8,7,US & Pakistan,2,-8,-9,-8,4.1
+932,Waziristan,5,770,Pakistan,-8,Waziri tribes,1,2,20,2004,9,5,2006,-8,-8,-8,-8,-8,-8,-8,7,US & Pakistan,2,-8,1200,1800,4.1
+933,Second Nigeria Christian-Muslim,7,,Christian Tarok,-8,Muslim Fulani,0,3,-9,2004,9,16,2004,-8,-8,-8,-8,-8,-8,-8,4,Muslim Fulani,6,-8,-9,-9,4.1
+935,First Yemeni Cleric,4,679,Yemen,-8,Zaidi Muslims,0,6,21,2004,4,8,2005,-8,-8,-8,-8,-8,-8,-8,6,Zaidi Muslims,1,-8,900,1350,4.1
+936,Philippine Joint Offensive,5,840,Phillippines,-8,MILF & NPA,0,1,17,2005,7,11,2006,-8,-8,-8,-8,-8,-8,-8,7,Phillippines,7,-8,723,2100,4.1
+937,Fifth Chad,4,483,Chad,-8,FUDC,0,12,18,2005,12,20,2006,-8,-8,-8,-8,-8,-8,-8,4,FUDC,1,-8,100,1000,4.1
+938,Third Somalia,4,2,United States,-8,-8,1,1,7,2007,6,3,2007,-8,-8,-8,-8,-8,-8,-8,4,SCIC,1,-8,-9,-8,4.1
+938,Third Somalia,4,520,Somalia,-8,SCIC,1,3,6,2006,6,1,2008,-8,-8,-8,-8,-8,-8,-8,4,SCIC,1,-8,-9,-9,4.1
+938,Third Somalia,4,530,Ethiopia,-8,-8,1,10,9,2006,6,11,2008,-8,-8,-8,-8,-8,-8,-8,4,SCIC,1,-8,-9,-8,4.1
+938,Third Somalia,4,-8,-8,531,Eritrea,1,10,19,2006,6,11,2008,-8,-8,-8,-8,-8,-8,-8,4,SCIC,1,-8,-8,-9,4.1
+940,Second Sri Lanka Tamil,5,780,Sri Lanka,-8,LTTE,0,10,11,2006,-7,-7,-7,-8,-8,-8,-8,-8,-8,-8,7,Sri Lanka,5,-8,-9,-9,4.1
+941,Second Yemeni Cleric,4,679,Yemen,-8,Zaidi Muslims,0,1,29,2007,6,16,2007,-8,-8,-8,-8,-8,-8,-8,6,Zaidi Muslims,6,-8,1500,2000,4.1
